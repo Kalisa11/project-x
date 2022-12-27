@@ -1,10 +1,10 @@
 import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { unstable_getServerSession as getServerSession } from "next-auth";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-import { BsFacebook } from "react-icons/bs";
+import { BsDiscord } from "react-icons/bs";
 import { FcGoogle } from "react-icons/fc";
 
 // import Navbar from "@/components/Layout/Navbar";
@@ -69,8 +69,8 @@ const SignIn: NextPage = () => {
             onClick={() => handleSignIn("facebook")}
             className="relative flex h-11 w-[95vw] max-w-[375px] items-center justify-center border border-gray-200 transition hover:border-gray-400"
           >
-            <span>Continue with Facebook</span>
-            <BsFacebook className="absolute top-1/2 left-3 h-6 w-6 -translate-y-1/2 fill-[#0A80EC]" />
+            <span>Continue with Discord</span>
+            <BsDiscord className="absolute top-1/2 left-3 h-6 w-6 -translate-y-1/2 fill-[#220ca0]" />
           </button>
         </div>
       </div>
