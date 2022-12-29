@@ -42,17 +42,30 @@ export const reminderRouter = router({
       });
     }
   ),
-  //to be edited
-  getOneReminder: protectedProcedure.query(
-    async ({ ctx: { prisma, session } }) => {
-      return await prisma.reminder.findMany({
+  getSingleReminder: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().cuid(),
+      })
+    )
+    .query(({ ctx, input }) => {
+      return ctx.prisma.reminder.findUnique({
         where: {
-          userId: session.user.id,
-        },
-        orderBy: {
-          createdAt: "desc",
+          id: input.id,
         },
       });
-    }
-  ),
+    }),
+  deleteReminder: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().cuid(),
+      })
+    )
+    .mutation(async ({ ctx: { prisma }, input }) => {
+      await prisma.reminder.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
 });

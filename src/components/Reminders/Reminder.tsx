@@ -1,5 +1,7 @@
 import { TrashIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 import React from "react";
+import { useReminder } from "./useReminder";
 
 type Reminder = {
   id: string;
@@ -12,27 +14,105 @@ type Reminder = {
   userId: string;
 };
 
-const Reminder = ({ data }: { data: Reminder }) => {
+const Reminder = ({ reminder }: { reminder: Reminder }) => {
+  const { deleteReminder } = useReminder();
   return (
-    <div className=" flex items-center  justify-between rounded-lg  bg-white p-4 shadow-md shadow-indigo-50">
-      <div>
-        <h2 className="text-lg font-bold text-gray-900">{data.title}</h2>
-        <h3 className="mt-2 text-left text-xl font-bold text-green-500">
-          {data.description}
-        </h3>
-        <p className="text-sm font-semibold text-gray-400">
-          {data.createdAt.toLocaleDateString()}
-        </p>
-        <button className="font-laonoto mt-6 rounded-lg bg-[#304FFE] px-4  py-2 text-sm tracking-wider text-white outline-none hover:bg-indigo-500">
-          VIEW
-        </button>
-        <button className="font-laonoto mt-6 ml-4 rounded-lg bg-red-600 px-4 py-2 text-sm tracking-wider text-white outline-none hover:bg-red-400">
-          <TrashIcon className="h-4 w-4 text-white" />
-        </button>
-      </div>
-      <div className="flex h-32 w-32 items-center justify-center  rounded-full border-2 border-dashed border-white  bg-gradient-to-tr from-blue-600  to-indigo-600 shadow-2xl shadow-[#304FFE] ">
+    <div className="h-30 mx-auto mb-0.5 rounded-sm border border-gray-500 bg-gray-100 text-gray-700">
+      <div
+        className={`flex border-l-8 ${
+          reminder.priority === "Medium"
+            ? "border-yellow-600"
+            : reminder.priority === "Low"
+            ? "border-green-600"
+            : "border-red-600"
+        } p-3`}
+      >
+        <div className="space-y-1 border-r-2 pr-3">
+          <div className="text-sm font-semibold leading-5">
+            <span className="text-xs font-normal leading-4 text-gray-500">
+              Id #
+            </span>{" "}
+            {reminder.id}
+          </div>
+          <div className="text-sm font-semibold leading-5">
+            <span className="pr text-xs font-normal leading-4 text-gray-500">
+              BOL #
+            </span>{" "}
+            10937
+          </div>
+          <div className="text-sm font-semibold leading-5">
+            <span className="text-xs font-normal leading-4 text-gray-500">
+              Due # {""}
+            </span>
+            {reminder.remindOn.toDateString()}{" "}
+          </div>
+        </div>
+        <div className="flex-1">
+          <div className="ml-3 space-y-1 border-r-2 pr-3">
+            <div className="text-base font-bold leading-6">
+              {reminder.title.toLocaleUpperCase()}{" "}
+            </div>
+            <div className="text-sm font-normal leading-4">
+              <span className="text-xs font-normal leading-4 text-gray-500">
+                {" "}
+                Created On:
+              </span>{" "}
+              {reminder.createdAt.toDateString()}{" "}
+            </div>
+            <div className="text-sm font-normal leading-4">
+              <span className="text-xs font-normal leading-4 text-gray-500">
+                {" "}
+                Description:
+              </span>{" "}
+              {reminder.description}{" "}
+            </div>
+          </div>
+        </div>
+        <div className="border-r-2 pr-3">
+          <button
+            onClick={() => {
+              deleteReminder.mutate({ id: reminder.id });
+            }}
+          >
+            <div className="mt-5 ml-3 border-2 rounded-md border-red-500 bg-orange-500 p-1 hover:bg-orange-300">
+              <TrashIcon className=" h-4 w-4 text-white" />
+            </div>
+          </button>
+        </div>
         <div>
-          <h1 className="text-2xl text-white">{data.priority}</h1>
+          <div
+            className={`my-5 ml-3 w-20 ${
+              reminder.priority === "Medium"
+                ? "bg-yellow-600"
+                : reminder.priority === "Low"
+                ? "bg-green-600"
+                : "bg-red-600"
+            } p-1`}
+          >
+            <div className="text-center text-xs font-semibold uppercase leading-4 text-yellow-100">
+              {reminder.priority.toLocaleUpperCase()}
+            </div>
+          </div>
+        </div>
+        <div>
+          <Link href={`/reminder/${reminder.id}`}>
+            <button className="my-5 ml-2 rounded-sm bg-gray-500 text-gray-100 focus:outline-none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+          </Link>
         </div>
       </div>
     </div>
