@@ -1,10 +1,10 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
-import { trpc } from "../utils/trpc";
 import Navbar from "@/components/Layout/Navbar";
+import Reminder from "@/components/Reminders";
+import ReminderList from "@/components/Reminders";
 
 const Home: NextPage = () => {
   return (
@@ -22,7 +22,7 @@ const Home: NextPage = () => {
             Welcome to
             <span className="text-[hsl(280,100%,70%)]"> Project X</span>
           </h1>
-
+          <ReminderList />
           <div className="flex flex-col items-center gap-2">
             <AuthShowcase />
           </div>
