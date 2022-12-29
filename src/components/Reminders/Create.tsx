@@ -2,6 +2,8 @@ import { Popover, Transition } from "@headlessui/react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { Fragment } from "react";
 import { trpc } from "@/utils/trpc";
+import toast from "react-hot-toast";
+
 import { useReminder } from "./useReminder";
 
 type Reminder = {
@@ -22,6 +24,9 @@ export default function CreateReminder() {
   const { refetch } = useReminder();
   const { mutateAsync } = trpc.reminder.createReminder.useMutation({
     onSuccess: () => {
+      toast.success("Reminder created", {
+        position: "top-center",
+      });
       refetch();
     },
   });

@@ -14,8 +14,9 @@ const ReminderList = () => {
   return (
     <ul>
       {data?.map((reminder) => (
-        <Reminder key={reminder.id} data={reminder} />
+        <Reminder key={reminder.id} reminder={reminder} />
       ))}
+      
     </ul>
   );
 };
