@@ -30,7 +30,7 @@ const SignIn: NextPage = () => {
         CredentialsSignin: "Sign in failed. The credentials are incorrect",
       };
 
-      toast.error(errors[error] || "Unable to sign in", {
+      toast.error(error || "Unable to sign in", {
         position: "bottom-right",
       });
     }

@@ -8,6 +8,10 @@ import React from "react";
 const ReminderPage = () => {
   const router = useRouter();
   const id = router.query.id as string;
+  const f = new Intl.DateTimeFormat("en-us", {
+    dateStyle: "full",
+    timeStyle: "short",
+  });
   const { data, isLoading, error } = trpc.reminder.getSingleReminder.useQuery({
     id,
   });
@@ -23,10 +27,10 @@ const ReminderPage = () => {
         <p className="mb-3 text-xl font-bold text-blue-600">{data?.title}</p>
         <p>{data?.description}</p>
         <p className="my-1 text-sm">
-          Created On: {data && new Date(data.createdAt).toDateString()}
+          Created On: {data && f.format(data?.createdAt)}
         </p>
         <p className="my-1 text-sm">
-          Updated On: {data && new Date(data.updatedAt).toDateString()}
+          Updated On: {data && f.format(data?.updatedAt)}
         </p>
         <Link href={`/`}>
           <ArrowUturnLeftIcon className="mt-3 h-6 w-6 cursor-pointer text-blue-600" />
