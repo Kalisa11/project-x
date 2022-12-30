@@ -16,10 +16,18 @@ const ReminderPage = () => {
     id,
   });
   if (isLoading) {
-    return <Layout title="Task Detail">Loading single task...</Layout>;
+    return (
+      <Layout title="Task Detail">
+        <p className="font-semibold text-white">Loading single task...</p>
+      </Layout>
+    );
   }
   if (error) {
-    return <Layout title="Task Detail">{error.message}</Layout>;
+    return (
+      <Layout title="Task Detail">
+        <p className="font-semibold text-white">{error.message}</p>
+      </Layout>
+    );
   }
   return (
     <div>

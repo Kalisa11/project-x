@@ -3,6 +3,7 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 
 export const reminderRouter = router({
+  /* Creating a new reminder and connecting it to the user. */
   createReminder: protectedProcedure
     .input(
       z.object({
@@ -11,7 +12,7 @@ export const reminderRouter = router({
         priority: z.string(),
         remindOn: z.date(),
       })
-    ) /* Creating a new reminder and connecting it to the user. */
+    )
     .mutation(async ({ ctx: { prisma, session }, input }) => {
       console.log(session);
       try {
@@ -30,6 +31,8 @@ export const reminderRouter = router({
         throw new Error(error);
       }
     }),
+
+  /* A query that is returning all the reminders that are connected to the user. */
   getReminders: protectedProcedure.query(
     async ({ ctx: { prisma, session } }) => {
       return await prisma.reminder.findMany({
@@ -42,6 +45,8 @@ export const reminderRouter = router({
       });
     }
   ),
+
+  /* A query that is returning a single reminder based on the id. */
   getSingleReminder: protectedProcedure
     .input(
       z.object({
@@ -55,6 +60,8 @@ export const reminderRouter = router({
         },
       });
     }),
+
+  /* Deleting a reminder based on the id. */
   deleteReminder: protectedProcedure
     .input(
       z.object({
@@ -67,5 +74,28 @@ export const reminderRouter = router({
           id: input.id,
         },
       });
+    }),
+
+  /* Updating the reminder based on the id. */
+  updateReminder: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().cuid(),
+        title: z.string(),
+        description: z.string(),
+        priority: z.string(),
+        remindOn: z.date(),
+      })
+    )
+    .mutation(async ({ ctx: { prisma }, input }) => {
+      const reminder = await prisma.reminder.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          ...input,
+        },
+      });
+      return reminder;
     }),
 });

@@ -1,12 +1,11 @@
-import { trpc } from "@/utils/trpc";
 import React from "react";
-import Reminder from "./Reminder";
+import ReminderItem from "./ReminderItem";
 import { useReminder } from "./useReminder";
 
 const ReminderList = () => {
   const { data, isLoading, error } = useReminder();
   if (isLoading) {
-    return <p>Loading task list...</p>;
+    return <p className="font-bold text-white">Loading task list...</p>;
   }
   if (error) {
     return <p>{error.message}</p>;
@@ -14,9 +13,8 @@ const ReminderList = () => {
   return (
     <ul>
       {data?.map((reminder) => (
-        <Reminder key={reminder.id} reminder={reminder} />
+        <ReminderItem key={reminder.id} reminder={reminder} />
       ))}
-      
     </ul>
   );
 };
