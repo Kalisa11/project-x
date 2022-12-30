@@ -1,4 +1,5 @@
-import { TrashIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { EyeIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React from "react";
 import { useReminder } from "./useReminder";
@@ -14,8 +15,9 @@ type Reminder = {
   userId: string;
 };
 
-const Reminder = ({ reminder }: { reminder: Reminder }) => {
+const ReminderItem = ({ reminder }: { reminder: Reminder }) => {
   const { deleteReminder } = useReminder();
+
   return (
     <div className="h-30 mx-auto mb-0.5 rounded-sm border border-gray-500 bg-gray-100 text-gray-700">
       <div
@@ -69,15 +71,34 @@ const Reminder = ({ reminder }: { reminder: Reminder }) => {
           </div>
         </div>
         <div className="border-r-2 pr-3">
-          <button
-            onClick={() => {
-              deleteReminder.mutate({ id: reminder.id });
-            }}
-          >
-            <div className="mt-5 ml-3 border-2 rounded-md border-red-500 bg-orange-500 p-1 hover:bg-orange-300">
-              <TrashIcon className=" h-4 w-4 text-white" />
-            </div>
-          </button>
+          <div className="ml-3 mt-4 inline-flex items-center rounded-md shadow-sm">
+            <Link href={`/reminder/update/${reminder.id}`}>
+              <button className="inline-flex items-center space-x-1 rounded-l-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-100 hover:text-blue-600">
+                <span>
+                  <PencilSquareIcon className="h-4 w-4 text-gray-700" />
+                </span>
+              </button>
+            </Link>
+
+            <Link href={`/reminder/${reminder.id}`}>
+              <button className="inline-flex items-center space-x-1 border-y border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-100 hover:text-blue-600">
+                <span>
+                  <EyeIcon className="h-4 w-4 text-gray-700" />
+                </span>
+              </button>
+            </Link>
+
+            <button
+              onClick={() => {
+                deleteReminder.mutate({ id: reminder.id });
+              }}
+              className="inline-flex items-center space-x-1 rounded-r-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-100 hover:text-blue-600"
+            >
+              <span>
+                <TrashIcon className="h-4 w-4 text-gray-700" />
+              </span>
+            </button>
+          </div>
         </div>
         <div>
           <div
@@ -94,29 +115,10 @@ const Reminder = ({ reminder }: { reminder: Reminder }) => {
             </div>
           </div>
         </div>
-        <div>
-          <Link href={`/reminder/${reminder.id}`}>
-            <button className="my-5 ml-2 rounded-sm bg-gray-500 text-gray-100 focus:outline-none">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
-          </Link>
-        </div>
+        <div></div>
       </div>
     </div>
   );
 };
 
-export default Reminder;
+export default ReminderItem;

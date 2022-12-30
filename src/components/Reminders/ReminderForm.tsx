@@ -1,39 +1,24 @@
 import { Popover, Transition } from "@headlessui/react";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { Fragment } from "react";
-import { trpc } from "@/utils/trpc";
-import toast from "react-hot-toast";
-
 import { useReminder } from "./useReminder";
+import { Reminder } from "@prisma/client";
+import { reminderSchema } from "@/schema/reminder";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-type Reminder = {
-  title: string;
-  remindOn: Date;
-  priority: string;
-  description: string;
-};
-
-export default function CreateReminder() {
+export default function ReminderForm() {
   const {
     register,
     handleSubmit,
     setValue,
     reset,
     formState: { errors },
-  } = useForm<Reminder>();
-  const { refetch } = useReminder();
-  const { mutateAsync } = trpc.reminder.createReminder.useMutation({
-    onSuccess: () => {
-      toast.success("Reminder created", {
-        position: "top-center",
-      });
-      refetch();
-    },
-  });
+  } = useForm<Reminder>({ resolver: yupResolver(reminderSchema) });
+  const { createReminder } = useReminder();
 
   const onSubmit: SubmitHandler<Reminder> = (data) => {
     reset();
-    mutateAsync({ ...data });
+    createReminder.mutateAsync({ ...data });
   };
   return (
     <div className="fixed top-16 w-full max-w-sm px-4">
@@ -62,21 +47,21 @@ export default function CreateReminder() {
                     <div className="items-center justify-center">
                       <div className="mt-8 max-w-md">
                         <div className="grid grid-cols-1 gap-6">
-                          <label className="block">
+                          <label className="mb-3 block text-base font-medium text-[#07074D]">
                             <span className="text-gray-700">Title</span>
                             <input
                               type="text"
                               {...register("title", { required: true })}
-                              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                              className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                             />
                           </label>
                           {errors.title && (
                             <span className="font-semibold text-red-600">
-                              This field is required
+                              {errors.title?.message}{" "}
                             </span>
                           )}
 
-                          <label className="block">
+                          <label className="mb-3 block text-base font-medium text-[#07074D]">
                             <span className="text-gray-700">Date </span>
                             <input
                               type="date"
@@ -86,21 +71,20 @@ export default function CreateReminder() {
                                   new Date(date.target.value)
                                 );
                               }}
-                              placeholder="Expense date"
-                              className="mt-2 h-10 w-64 items-center  rounded-lg border border-teal-300 pl-2 text-gray-600 focus:border focus:border-indigo-700 focus:outline-none"
+                              className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                             />
 
                             {errors.remindOn && (
                               <span className="font-semibold text-red-600">
-                                This field is required
+                                {errors.remindOn?.message}{" "}
                               </span>
                             )}
                           </label>
-                          <label className="block">
+                          <label className="mb-3 block text-base font-medium text-[#07074D]">
                             <span className="text-gray-700">Priority </span>
                             <select
                               {...register("priority", { required: true })}
-                              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                              className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                             >
                               <option>High</option>
                               <option>Medium</option>
@@ -108,27 +92,27 @@ export default function CreateReminder() {
                             </select>
                             {errors.priority && (
                               <span className="font-semibold text-red-600">
-                                This field is required
+                                {errors.priority?.message}{" "}
                               </span>
                             )}
                           </label>
-                          <label className="mb-4 block">
+                          <label className="mb-3 block text-base font-medium text-[#07074D]">
                             <span className="text-gray-700">Description</span>
                             <textarea
                               {...register("description", { required: true })}
-                              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                              className="m-2 w-full resize-none rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                               rows={3}
                               defaultValue={""}
                             />
                             {errors.description && (
                               <span className="font-semibold text-red-600">
-                                This field is required
+                                {errors.description?.message}
                               </span>
                             )}
                           </label>
                           <button
                             type="submit"
-                            className="rounded-sm text-teal-400"
+                            className="bg-[#6A64F1] py-3 px-4 text-base font-semibold text-white outline-none"
                           >
                             ADD
                           </button>
