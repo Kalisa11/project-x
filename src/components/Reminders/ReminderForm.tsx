@@ -4,7 +4,7 @@ import { Fragment } from "react";
 import { useReminder } from "./useReminder";
 import { Reminder } from "@prisma/client";
 import { reminderSchema } from "@/schema/reminder";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { yupResolver } from "@hookform/resolvers/yup"; //zod resolver can also be used here ^
 
 export default function ReminderForm() {
   const {
